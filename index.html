@@ -16,9 +16,6 @@
         ];
 
         piechart = Raphael("holder", 700, 700).pieChart(entries);
-        demo_piechart = Raphael("holder", 700, 700).demo_pieChart(350, 350, 200, entries.map(function(x){ return x.value}), entries.map(function(x){ return x.labels}), "#fff");
-
-        console.log("piechart:%o", piechart);
 
         $("button#addsector").click(function(){
             piechart.add_sector(parseInt(Math.random() * 100), "new sector");
