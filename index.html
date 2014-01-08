@@ -9,15 +9,25 @@
     <title>Dynamic Pie Chart Demo</title>
     <script>
     $(function(){
-        var values = [11, 22, 33];
-        var labels = ["js", "css", "html"];
-        var piechart = Raphael("holder", 700, 700).pieChart(350, 350, 200, values, labels, "#fff");
+        var entries = [
+            {label: "css", value: 11},
+            {label: "html", value: 21},
+            {label: "javascript", value: 31}
+        ];
+
+        piechart = Raphael("holder", 700, 700).pieChart(entries);
+        demo_piechart = Raphael("holder", 700, 700).demo_pieChart(350, 350, 200, entries.map(function(x){ return x.value}), entries.map(function(x){ return x.labels}), "#fff");
 
         console.log("piechart:%o", piechart);
 
         $("button#addsector").click(function(){
-            piechart.addsector(44,"c#");
+            piechart.add_sector(parseInt(Math.random() * 100), "new sector");
         });
+
+        $("button#removesector").click(function(){
+            piechart.remove_sector();
+        });
+
     });
     </script>
 </head>
@@ -25,5 +35,6 @@
     <h1>Dynamic Pie Chart Demo</h1>
     <div id="holder"></div>
     <button id="addsector">Add Sector</button>
+    <button id="removesector">Remove Sector</button>
 </body>
 </html>
