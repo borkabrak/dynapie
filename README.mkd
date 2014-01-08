@@ -1,0 +1,11 @@
+Dynamic Pie Chart
+=================
+
+Pie chart object using Raphael.js that supports dynamically adding/removing
+sectors (data points).
+
+
+TODO
+====
+
+* Support dynamically adding/removing sectors
