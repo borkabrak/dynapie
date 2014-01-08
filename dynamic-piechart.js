@@ -5,6 +5,7 @@
  */
 
 Raphael.fn.pieChart = function (entries, cx, cy, r, stroke) {
+    "use strict;"
     var me = this;
     me.cx = cx || 350;
     me.cy = cy || 350;
@@ -37,7 +38,7 @@ Raphael.fn.pieChart = function (entries, cx, cy, r, stroke) {
             var delta = 30;
             var bcolor = Raphael.hsb(start, 1, 1);
 
-            draw_sector( angle, angle + angleplus, {fill: "90-" + bcolor + "-" + color, stroke: stroke, "stroke-width": 3});
+            draw_sector( angle, angle + angleplus, {fill: "90-" + bcolor + "-" + color, stroke: me.stroke, "stroke-width": 3});
 
             angle += angleplus;
             start += 0.1;
