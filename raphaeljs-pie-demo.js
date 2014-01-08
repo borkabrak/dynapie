@@ -1,3 +1,7 @@
+/*
+ * This is the piechart demo code from raphaeljs.com
+ * We're using this to get started.
+ */
 Raphael.fn.pieChart = function (cx, cy, r, values, labels, stroke) {
     var paper = this,
         rad = Math.PI / 180,
@@ -43,13 +47,3 @@ Raphael.fn.pieChart = function (cx, cy, r, values, labels, stroke) {
     return chart;
 };
 
-$(function () {
-    var values = [],
-        labels = [];
-    $("tr").each(function () {
-        values.push(parseInt($("td", this).text(), 10));
-        labels.push($("th", this).text());
-    });
-    $("table").hide();
-    Raphael("holder", 700, 700).pieChart(350, 350, 200, values, labels, "#fff");
-});

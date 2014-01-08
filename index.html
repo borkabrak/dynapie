@@ -8,6 +8,13 @@
     <script src="raphaeljs-pie-demo.js"></script>
     <script src="dynamic-piechart.js"></script>
     <title>Dynamic Pie Chart Demo</title>
+    <script>
+    window.onload = function(){
+        var values = [11, 22, 33];
+        var labels = ["js", "css", "html"];
+        Raphael("holder", 700, 700).pieChart(350, 350, 200, values, labels, "#fff");
+    }
+    </script>
 </head>
 <body>
     <h1>Dynamic Pie Chart Demo</h1>
