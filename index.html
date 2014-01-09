@@ -15,23 +15,31 @@
             {label: "javascript", value: 31}
         ];
 
-        piechart = Raphael("holder", 700, 700).pieChart(entries);
+        piechart = Raphael("holder", 700, 600).pieChart(entries);
 
         $("button#addsector").click(function(){
-            piechart.add_sector(parseInt(Math.random() * 100), "new sector");
+            piechart.add( $("#label").val(), $("#value").val() );
         });
 
         $("button#removesector").click(function(){
-            piechart.remove_sector();
+            piechart.remove();
         });
 
     });
     </script>
 </head>
 <body>
+
     <h1>Dynamic Pie Chart Demo</h1>
     <div id="holder"></div>
+
+    <h2>Add a sector</h2>
+    <input id="label" placeholder="Label" value="Sample Label">
+    <input id="value" placeholder="Value" value="20">
+    <br>
     <button id="addsector">Add Sector</button>
+
+    <h2>Remove a sector</h2>
     <button id="removesector">Remove Sector</button>
 </body>
 </html>

@@ -5,15 +5,14 @@
  */
 
 Raphael.fn.pieChart = function (entries, cx, cy, r, stroke) {
-    "use strict;"
+    "use strict";
     var me = this;
     var rad = Math.PI / 180;
 
     me.cx = cx || 350;
-    me.cy = cy || 350;
+    me.cy = cy || 250;
     me.r = r || 200;
     me.stroke = stroke || "#fff";
-    me.chart = me.set();
 
     me.entries = entries; // data points.  Each should have 'label' and 'value'
 
@@ -28,13 +27,19 @@ Raphael.fn.pieChart = function (entries, cx, cy, r, stroke) {
         return me.path( patharr ).attr(params);
     };
 
-    function draw() {
+    me.draw = function() {
+
         var angle = 0;
         var total = me.entries.reduce(function(x,y){ return {value: x.value + y.value} }).value;
         var start = 0;
         var duration = 500;
 
+        // Initialize component elements
+        me.elements = me.set();
+        me.elements.remove();
+
         me.entries.forEach(function(entry){
+
             var angleplus = 360 * entry.value / total;
             var popangle = angle + (angleplus / 2);
             var color = Raphael.hsb(start, 0.75, 1);
@@ -55,13 +60,34 @@ Raphael.fn.pieChart = function (entries, cx, cy, r, stroke) {
 
             });
 
+            me.elements.push(p);
+            me.elements.push(txt);
+
             angle += angleplus;
             start += 0.1;
 
         });
     };
 
-    draw();
+    me.add = function(label, value) {
+        if (label.length <= 0 || value.length <= 0) { return null };
+        me.entries.push({label: label, value: parseInt(value)});
+        me.draw();
+        return me.entries;
+    };
+
+    me.remove = function() {
+        if (me.entries.length < 3) { 
+            console.log("Can't remove entry.  Chart must have at least two entries.");
+            return null 
+        };
+
+        var entry = me.entries.pop();
+        me.draw();
+        return entry;
+    };
+
+    me.draw();
 
     return me;
 
