@@ -1,3 +1,15 @@
 body {
     font-family: sans-serif;
 }
+
+h1, h2 {
+    text-shadow: 0.05em -0.05em 0.1em #667;
+}
+
+#console {
+    background: #333;
+    color: #0a0;
+    padding: 0.5em;
+    border-radius: 0.5em;
+    border: solid green 2px;
+}

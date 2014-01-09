@@ -92,7 +92,7 @@ Raphael.fn.pieChart = function (entries, cx, cy, r, stroke) {
 
     me.remove = function() {
         if (me.entries.length < 3) { 
-            console.log("Can't remove entry.  Chart must have at least two entries.");
+            log("Can't remove entry.  Chart must have at least two entries.");
             return null 
         };
 

@@ -8,6 +8,12 @@
     <script src="dynamic-piechart.js"></script>
     <title>Dynamic Pie Chart Demo</title>
     <script>
+
+    function log(string){
+        console.log(string);
+        $("#console").text(string);
+    };
+
     $(function(){
         var entries = [
             {label: "css", value: 11},
@@ -31,7 +37,10 @@
 <body>
 
     <h1>Dynamic Pie Chart Demo</h1>
+
     <div id="holder"></div>
+
+    <div id="console"> </div>
 
     <h2>Add a sector</h2>
     <input id="label" placeholder="Label" value="Sample Label">
