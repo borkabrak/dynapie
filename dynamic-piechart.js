@@ -19,13 +19,30 @@ Raphael.fn.pieChart = function (entries, cx, cy, r, stroke) {
 
     function make_sector(startAngle, endAngle, params){
 
-        var x1 = me.cx + me.r * Math.cos(-startAngle * rad);
-        var x2 = me.cx + me.r * Math.cos(-endAngle * rad);
-        var y1 = me.cy + me.r * Math.sin(-startAngle * rad);
-        var y2 = me.cy + me.r * Math.sin(-endAngle * rad);
+        var point1 = {
+            x: me.cx + me.r * Math.cos(-startAngle * rad),
+            y: me.cy + me.r * Math.sin(-startAngle * rad)
+        };
 
-        var patharr = ["M", me.cx, me.cy, "L", x1, y1, "A", me.r, me.r, 0, +(endAngle - startAngle > 180), 0, x2, y2, "z"]
+        var point2 = {
+            x: me.cx + me.r * Math.cos(-endAngle * rad),
+            y: me.cy + me.r * Math.sin(-endAngle * rad)
+        };
+
+        var patharr = ["M", me.cx, me.cy, "L", point1.x, point1.y, "A", me.r, me.r, 0, +(endAngle - startAngle > 180), 0, point2.x, point2.y, "z"]
         return me.path( patharr ).attr(params);
+    };
+
+    function make_text(entry, popangle) {
+        return me.text(
+                me.cx + (me.r / 2) * Math.cos(-popangle * rad),
+                me.cy + (me.r / 2) * Math.sin(-popangle * rad),
+                entry.label + "(" + entry.value + ")"
+            ).attr({
+                fill: "#000",
+                stroke: "none",
+                "font-size": 20
+            });
     };
 
     me.draw = function() {
@@ -44,20 +61,16 @@ Raphael.fn.pieChart = function (entries, cx, cy, r, stroke) {
             var angleplus = 360 * entry.value / total;
             var popangle = angle + (angleplus / 2);
             var color = Raphael.hsb(start, 0.75, 1);
-            var delta = 30;
             var bcolor = Raphael.hsb(start, 1, 1);
 
             var sector = make_sector( angle, angle + angleplus, {fill: "90-" + bcolor + "-" + color, stroke: me.stroke, "stroke-width": 3});
-            var text = me.text(me.cx + (me.r + delta + 55) * Math.cos(-popangle * rad), me.cy + (me.r + delta + 25) * Math.sin(-popangle * rad), entry.label + "(" + entry.value + ")")
-                    .attr({fill: bcolor, stroke: "none", opacity: 0, "font-size": 20});
+            var text = make_text(entry, popangle);
 
             sector.mouseover(function () {
                 sector.stop().animate({transform: "s1.1 1.1 " + me.cx + " " + me.cy}, duration, "elastic");
-                text.stop().animate({opacity: 1}, duration, "elastic");
 
             }).mouseout(function () {
                 sector.stop().animate({transform: ""}, duration, "elastic");
-                text.stop().animate({opacity: 0}, duration);
 
             });
 
