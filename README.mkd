@@ -8,5 +8,6 @@ sectors (data points).
 TODO
 ====
 
+* make labels more obvious
 * 3D-ify
 * Other groovy effects?
