@@ -18,38 +18,45 @@ Raphael.fn.pieChart = function (entries, cx, cy, r, stroke) {
 
     me.entries = entries; // data points.  Each should have 'label' and 'value'
 
+    // Return a point ( {x:<val>, y:<val>} ), a certain distance from the center at a certain angle
+    // Units of distance are radii.  (i.e., 0 is the center and 1 is on the circumference)
+    function get_point(distance_from_center, angle) {
+        return {
+            x: me.cx + me.r * distance_from_center * Math.cos(-angle * rad),
+            y: me.cy + me.r * distance_from_center * Math.sin(-angle * rad)
+        };
+    };
+
+    // Draw and return a sector
     function make_sector(startAngle, endAngle, params){
 
-        var point1 = {
-            x: me.cx + me.r * Math.cos(-startAngle * rad),
-            y: me.cy + me.r * Math.sin(-startAngle * rad)
-        };
-
-        var point2 = {
-            x: me.cx + me.r * Math.cos(-endAngle * rad),
-            y: me.cy + me.r * Math.sin(-endAngle * rad)
-        };
+        var point1 = get_point(1, startAngle);
+        var point2 = get_point(1, endAngle);
 
         var patharr = ["M", me.cx, me.cy, "L", point1.x, point1.y, "A", me.r, me.r, 0, +(endAngle - startAngle > 180), 0, point2.x, point2.y, "z"]
         return me.path( patharr ).attr(params);
     };
 
-    function make_text(entry, popangle) {
+    // Draw and return a text element
+    function make_text(string, where) {
         return me.text(
-                me.cx + (me.r / 2) * Math.cos(-popangle * rad),
-                me.cy + (me.r / 2) * Math.sin(-popangle * rad),
-                entry.label + "(" + entry.value + ")"
-            ).attr({
-                fill: "#000",
-                stroke: "none",
-                "font-size": 20
-            });
+            where.x,
+            where.y,
+            string
+        ).attr({
+            fill: "#000",
+            stroke: "none",
+            "font-size": 20,
+        });
     };
 
+    // Draw the whole chart.  Return the set of elements
     me.draw = function() {
 
+        // Widdershins edge (counter-clockwise)
         var angle = 0;
-        var total = me.entries.reduce(function(x,y){ return {value: x.value + y.value} }).value;
+
+        var total_value = me.entries.reduce(function(x,y){ return {value: x.value + y.value} }).value;
         var start = 0;
         var duration = 500;
 
@@ -58,13 +65,18 @@ Raphael.fn.pieChart = function (entries, cx, cy, r, stroke) {
 
         me.entries.forEach(function(entry){
 
-            var angleplus = 360 * entry.value / total;
-            var popangle = angle + (angleplus / 2);
-            var color = Raphael.hsb(start, 0.75, 1);
+            // Deasil edge of sector (clockwise)
+            var angleplus = 360 * entry.value / total_value;
+
+            // Angle of a line drawn through the middle of the sector
+            var sector_angle = angle + (angleplus / 2);
+
+            // Colors (2 for a gradient)
+            var color = Raphael.hsb(start, 0.50, 1);
             var bcolor = Raphael.hsb(start, 1, 1);
 
             var sector = make_sector( angle, angle + angleplus, {fill: "90-" + bcolor + "-" + color, stroke: me.stroke, "stroke-width": 3});
-            var text = make_text(entry, popangle);
+            var text = make_text( entry.label + "(" + entry.value + ")", get_point( 0.5, sector_angle));
 
             sector.mouseover(function () {
                 sector.stop().animate({transform: "s1.1 1.1 " + me.cx + " " + me.cy}, duration, "elastic");
@@ -79,6 +91,8 @@ Raphael.fn.pieChart = function (entries, cx, cy, r, stroke) {
 
             angle += angleplus;
             start += 0.1;
+
+            return me.elements;
 
         });
     };
