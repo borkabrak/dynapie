@@ -14,6 +14,7 @@ Raphael.fn.pieChart = function (entries, cx, cy, r, stroke) {
     me.cy = cy || 250;
     me.r = r || 200;
     me.stroke = stroke || "#fff";
+    me.elements = me.set();
 
     me.entries = entries; // data points.  Each should have 'label' and 'value'
 
@@ -53,7 +54,6 @@ Raphael.fn.pieChart = function (entries, cx, cy, r, stroke) {
         var duration = 500;
 
         // Initialize component elements
-        me.elements = me.set();
         me.elements.remove();
 
         me.entries.forEach(function(entry){
