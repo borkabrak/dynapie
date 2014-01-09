@@ -8,4 +8,5 @@ sectors (data points).
 TODO
 ====
 
-* Support dynamically adding/removing sectors
+* 3D-ify
+* Other groovy effects?
