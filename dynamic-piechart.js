@@ -1,7 +1,8 @@
 /*
  * Dynamic piechart
  *
- * A pie chart object that can have value/sectors dynamically added and removed
+ * A pie chart object that can have value/sectors (i.e., 'entries') dynamically
+ * added and removed
  */
 
 Raphael.fn.pieChart = function (entries, cx, cy, r, stroke) {
@@ -16,7 +17,7 @@ Raphael.fn.pieChart = function (entries, cx, cy, r, stroke) {
 
     me.entries = entries; // data points.  Each should have 'label' and 'value'
 
-    function draw_sector(startAngle, endAngle, params){
+    function make_sector(startAngle, endAngle, params){
 
         var x1 = me.cx + me.r * Math.cos(-startAngle * rad);
         var x2 = me.cx + me.r * Math.cos(-endAngle * rad);
@@ -46,22 +47,22 @@ Raphael.fn.pieChart = function (entries, cx, cy, r, stroke) {
             var delta = 30;
             var bcolor = Raphael.hsb(start, 1, 1);
 
-            var p = draw_sector( angle, angle + angleplus, {fill: "90-" + bcolor + "-" + color, stroke: me.stroke, "stroke-width": 3});
-            var txt = me.text(me.cx + (me.r + delta + 55) * Math.cos(-popangle * rad), me.cy + (me.r + delta + 25) * Math.sin(-popangle * rad), entry.label + "(" + entry.value + ")")
+            var sector = make_sector( angle, angle + angleplus, {fill: "90-" + bcolor + "-" + color, stroke: me.stroke, "stroke-width": 3});
+            var text = me.text(me.cx + (me.r + delta + 55) * Math.cos(-popangle * rad), me.cy + (me.r + delta + 25) * Math.sin(-popangle * rad), entry.label + "(" + entry.value + ")")
                     .attr({fill: bcolor, stroke: "none", opacity: 0, "font-size": 20});
 
-            p.mouseover(function () {
-                p.stop().animate({transform: "s1.1 1.1 " + me.cx + " " + me.cy}, duration, "elastic");
-                txt.stop().animate({opacity: 1}, duration, "elastic");
+            sector.mouseover(function () {
+                sector.stop().animate({transform: "s1.1 1.1 " + me.cx + " " + me.cy}, duration, "elastic");
+                text.stop().animate({opacity: 1}, duration, "elastic");
 
             }).mouseout(function () {
-                p.stop().animate({transform: ""}, duration, "elastic");
-                txt.stop().animate({opacity: 0}, duration);
+                sector.stop().animate({transform: ""}, duration, "elastic");
+                text.stop().animate({opacity: 0}, duration);
 
             });
 
-            me.elements.push(p);
-            me.elements.push(txt);
+            me.elements.push(sector);
+            me.elements.push(text);
 
             angle += angleplus;
             start += 0.1;
