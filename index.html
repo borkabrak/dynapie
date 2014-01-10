@@ -24,7 +24,8 @@
         piechart = Raphael("holder", 700, 600).pieChart(entries);
 
         $("button#addsector").click(function(){
-            piechart.add_sector( $("#label").val(), $("#value").val() );
+            piechart.add_sector( $("#label").val(), $("#value").val()); 
+            $("#value").val( parseInt(Math.random() * 100) );
         });
 
         $("button#removesector").click(function(){

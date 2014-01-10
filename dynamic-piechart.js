@@ -109,7 +109,7 @@ Raphael.fn.pieChart = function (entries, params) {
             } else {
                 text = make_text( 
                     entry.label + "(" + entry.value + ")",
-                    get_point( 0.5, sector_angle)
+                    get_point( 0.6, sector_angle)
                 );
                 me.elements.push(text);
             };
