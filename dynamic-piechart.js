@@ -1,29 +1,29 @@
 /*
- * Dynamic piechart
- *
- * A pie chart object that can have value/sectors (i.e., 'entries') dynamically
- * added and removed
- *
- * Usage:
- *  pieChart(entries, params)
- *
- *      - entries:
- *          An array of objects, each of which describes a sector in the pie
- *          chart with 'label' and 'value' properties.  e.g:
- *
- *              var entries = [
- *                  { label: <string>, value: <number> }, 
- *                  <. . .>
- *              ]
- *
- *      - params:
- *          Contains non-default details of the pie chart as a whole:
- *
- *              cx, cy: Where on the canvas to put the center of the chart
- *
- *              r: Radius of the chart
- *
- *              stroke: Stroke color of the lines
+  Dynamic piechart
+ 
+  A pie chart object that can have value/sectors (i.e., 'entries') dynamically
+  added and removed
+ 
+  Usage:
+   pieChart(entries, params)
+ 
+       - entries:
+           An object describing sectors in the pie chart. e.g.:
+ 
+               var entries = {
+                    "javascript": 33,
+                    "css": 19,
+                    . . .
+                }
+            
+       - params:
+           Contains non-default details of the pie chart as a whole:
+ 
+               cx, cy: Where on the canvas to put the center of the chart
+ 
+               r: Radius of the chart
+ 
+               stroke: Stroke color of the lines
  */
 
 Raphael.fn.pieChart = function (entries, params) {
@@ -38,28 +38,33 @@ Raphael.fn.pieChart = function (entries, params) {
     me.stroke = params.stroke || "#fff";
     me.elements = me.set();
 
-    me.entries = entries; // data points.  Each should have 'label' and 'value'
+    me.entries = entries; 
 
     me.add_sector = function(label, value) {
         if (label.length <= 0 || value.length <= 0) { return null };
-        me.entries.push({label: label, value: parseInt(value)});
+        me.entries[label] = parseInt(value);
         me.draw();
         return me.entries;
     };
 
     me.remove_sector = function(what) {
-        if (me.entries.length < 3) { 
+        if (Object.keys(me.entries).length < 3) { 
             log("Can't remove entry.  Chart must have at least two entries.");
             return null 
         };
 
-        // What to remove?  label or value?
-        var matches;
-        if (matches = entries.filter(function(entry) { return entry.value === parseInt(what) })){
-            console.log("Remove %o", matches);
-        };
+        // Remove by label name
+        var removed = {};
+        Object.keys(me.entries).forEach(function(label){
+            log("Looking to remove" + label);
+            if (typeof me.entries.label !== "undefined"){
+                log("Found it.");
+                removed.label = me.entries.label;
+                delete me.entries.label;
+            };
+        });
 
-        var removed = me.entries.pop();
+        // What to remove?  label or value?
         me.draw();
         return removed;
     };
@@ -70,16 +75,17 @@ Raphael.fn.pieChart = function (entries, params) {
         // Widdershins edge (counter-clockwise)
         var angle = 0;
 
-        var total_value = me.entries.reduce(function(x,y){ return {value: x.value + y.value} }).value;
+        var total_value = Object.values(me.entries).reduce(function(x,y){ return x + y });
         var start = 0;
 
         // Initialize component elements
         me.elements.remove();
 
-        me.entries.forEach(function(entry){
+        Object.keys(me.entries).forEach(function(label){
+            var value = entries[label];
 
             // Deasil edge of sector (clockwise)
-            var angleplus = 360 * entry.value / total_value;
+            var angleplus = 360 * value / total_value;
 
             // Angle of a line drawn through the middle of the sector
             var sector_angle = angle + (angleplus / 2);
@@ -95,7 +101,7 @@ Raphael.fn.pieChart = function (entries, params) {
                     fill: "90-" + bcolor + "-" + color,
                     stroke: me.stroke, 
                     "stroke-width": 3,
-                    title: angleplus > 30 ? "" : entry.label + "(" + entry.value + ")"
+                    title: angleplus > 30 ? "" : label + "(" + value + ")"
                 }
             );
             me.elements.push(sector);
@@ -104,11 +110,11 @@ Raphael.fn.pieChart = function (entries, params) {
             // Sector too small?  Show tooltip instead.
             //  For now, the test is just whether the sector is < 30°.
             if (angleplus < 30) {
-                sector.attr("title", entry.label + "(" + entry.value + ")");
+                sector.attr("title", label + "(" + value + ")");
 
             } else {
                 text = make_text( 
-                    entry.label + "(" + entry.value + ")",
+                    label + "(" + value + ")",
                     get_point( 0.6, sector_angle)
                 );
                 me.elements.push(text);
@@ -176,4 +182,11 @@ Raphael.fn.pieChart = function (entries, params) {
         });
     };
 
+};
+
+Object.values = function(object){
+    var result = [];
+    for (var key in object)
+        result.push(object[key]);
+    return result;
 };
