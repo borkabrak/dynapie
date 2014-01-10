@@ -8,6 +8,7 @@ sectors (data points).
 TODO
 ====
 
+* Remove sector takes a label or value to remove
 * alternate labeling if label doesn't fit inside sector
 * 3D-ify
 * Other groovy effects?

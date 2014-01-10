@@ -21,14 +21,14 @@
             {label: "javascript", value: 31}
         ];
 
-        piechart = Raphael("holder", 700, 600).pieChart(entries);
+        piechart = Raphael("holder", 700, 600).pieChart(entries, {stroke: "#00f"});
 
         $("button#addsector").click(function(){
-            piechart.add( $("#label").val(), $("#value").val() );
+            piechart.add_sector( $("#label").val(), $("#value").val() );
         });
 
         $("button#removesector").click(function(){
-            piechart.remove();
+            piechart.remove_sector($("#remove_this").val());
         });
 
     });
@@ -49,6 +49,8 @@
     <button id="addsector">Add Sector</button>
 
     <h2>Remove a sector</h2>
+    <input id="remove_this" placeholder="What to remove">
+    <br>
     <button id="removesector">Remove Sector</button>
 </body>
 </html>

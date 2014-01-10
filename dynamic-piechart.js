@@ -3,39 +3,65 @@
  *
  * A pie chart object that can have value/sectors (i.e., 'entries') dynamically
  * added and removed
+ *
+ * Usage:
+ *  pieChart(entries, params)
+ *
+ *      - entries:
+ *          An array of objects, each of which describes a sector in the pie
+ *          chart with 'label' and 'value' properties.  e.g:
+ *
+ *              var entries = [
+ *                  { label: <string>, value: <number> }, 
+ *                  <. . .>
+ *              ]
+ *
+ *      - params:
+ *          Contains non-default details of the pie chart as a whole:
+ *
+ *              cx, cy: Where on the canvas to put the center of the chart
+ *
+ *              r: Radius of the chart
+ *
+ *              stroke: Stroke color of the lines
  */
 
-Raphael.fn.pieChart = function (entries, cx, cy, r, stroke) {
+Raphael.fn.pieChart = function (entries, params) {
     "use strict";
     var me = this;
-    var rad = Math.PI / 180;
+    var rad = Math.PI / 180; // Gnarly!
 
-    me.cx = cx || 350;
-    me.cy = cy || 250;
-    me.r = r || 200;
-    me.stroke = stroke || "#fff";
+    params = params || {};
+    me.cx = params.cx || 350;
+    me.cy = params.cy || 250;
+    me.r = params.r || 200;
+    me.stroke = params.stroke || "#fff";
     me.elements = me.set();
 
     me.entries = entries; // data points.  Each should have 'label' and 'value'
 
-    // Add a sector
-    me.add = function(label, value) {
+    me.add_sector = function(label, value) {
         if (label.length <= 0 || value.length <= 0) { return null };
         me.entries.push({label: label, value: parseInt(value)});
         me.draw();
         return me.entries;
     };
 
-    // Remove a sector
-    me.remove = function() {
+    me.remove_sector = function(what) {
         if (me.entries.length < 3) { 
             log("Can't remove entry.  Chart must have at least two entries.");
             return null 
         };
 
-        var entry = me.entries.pop();
+        // What to remove?  label or value?
+        var matches;
+        if (matches = entries.filter(function(entry) { return entry.value === parseInt(what) })){
+            console.log("Remove %o", matches);
+        };
+
+        var removed = me.entries.pop();
         me.draw();
-        return entry;
+        return removed;
     };
 
     // Draw the whole chart.  Return the set of elements
