@@ -94,7 +94,8 @@ Raphael.fn.pieChart = function (entries, params) {
                 {
                     fill: "90-" + bcolor + "-" + color,
                     stroke: me.stroke, 
-                    "stroke-width": 3
+                    "stroke-width": 3,
+                    title: angleplus > 30 ? "" : entry.label + "(" + entry.value + ")"
                 }
             );
 
