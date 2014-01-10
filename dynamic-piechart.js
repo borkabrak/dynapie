@@ -98,16 +98,23 @@ Raphael.fn.pieChart = function (entries, params) {
                     title: angleplus > 30 ? "" : entry.label + "(" + entry.value + ")"
                 }
             );
+            me.elements.push(sector);
 
-            var text = make_text( 
-                entry.label + "(" + entry.value + ")",
-                get_point( 0.5, sector_angle)
-            );
+            var text;
+            // Sector too small?  Show tooltip instead.
+            //  For now, the test is just whether the sector is < 30°.
+            if (angleplus < 30) {
+                sector.attr("title", entry.label + "(" + entry.value + ")");
+
+            } else {
+                text = make_text( 
+                    entry.label + "(" + entry.value + ")",
+                    get_point( 0.5, sector_angle)
+                );
+                me.elements.push(text);
+            };
 
             attach_events(sector, text);
-
-            me.elements.push(sector);
-            me.elements.push(text);
 
             angle += angleplus;
             start += 0.1;
@@ -160,11 +167,11 @@ Raphael.fn.pieChart = function (entries, params) {
         // state to save between mouseover and mouseout
         sector.mouseover(function () {
             sector.stop().animate({ transform: "s1.1 1.1 " + me.cx + "," + me.cy }, duration, "bounce");
-            text.stop().animate({ transform: "s1.1 1.1 " + me.cx + "," + me.cy }, duration, "bounce");
+            text && text.stop().animate({ transform: "s1.1 1.1 " + me.cx + "," + me.cy }, duration, "bounce");
 
         }).mouseout(function () {
             sector.stop().animate({ transform: "" }, duration, "elastic");
-            text.stop().animate({ transform: ""}, duration, "elastic");
+            text && text.stop().animate({ transform: ""}, duration, "elastic");
 
         });
     };
