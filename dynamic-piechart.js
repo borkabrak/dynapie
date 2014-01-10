@@ -72,7 +72,6 @@ Raphael.fn.pieChart = function (entries, params) {
 
         var total_value = me.entries.reduce(function(x,y){ return {value: x.value + y.value} }).value;
         var start = 0;
-        var duration = 500;
 
         // Initialize component elements
         me.elements.remove();
@@ -89,16 +88,22 @@ Raphael.fn.pieChart = function (entries, params) {
             var color = Raphael.hsb(start, 0.50, 1);
             var bcolor = Raphael.hsb(start, 1, 1);
 
-            var sector = make_sector( angle, angle + angleplus, {fill: "90-" + bcolor + "-" + color, stroke: me.stroke, "stroke-width": 3});
-            var text = make_text( entry.label + "(" + entry.value + ")", get_point( 0.5, sector_angle));
+            var sector = make_sector( 
+                angle,
+                angle + angleplus,
+                {
+                    fill: "90-" + bcolor + "-" + color,
+                    stroke: me.stroke, 
+                    "stroke-width": 3
+                }
+            );
 
-            sector.mouseover(function () {
-                sector.stop().animate({transform: "s1.1 1.1 " + me.cx + " " + me.cy}, duration, "elastic");
+            var text = make_text( 
+                entry.label + "(" + entry.value + ")",
+                get_point( 0.5, sector_angle)
+            );
 
-            }).mouseout(function () {
-                sector.stop().animate({transform: ""}, duration, "elastic");
-
-            });
+            attach_events(sector, text);
 
             me.elements.push(sector);
             me.elements.push(text);
@@ -145,6 +150,21 @@ Raphael.fn.pieChart = function (entries, params) {
             fill: "#000",
             stroke: "none",
             "font-size": 20,
+        });
+    };
+
+    function attach_events(sector, text){
+        var duration = 500;
+
+        // state to save between mousover and mouseout
+        sector.mouseover(function () {
+            sector.stop().animate({ transform: "s1.1 1.1 " + me.cx + "," + me.cy }, duration, "bounce");
+            text.stop().animate({ transform: "s1.1 1.1" }, duration, "elastic");
+
+        }).mouseout(function () {
+            sector.stop().animate({ transform: "" }, duration, "elastic");
+            text.stop().transform("");
+
         });
     };
 

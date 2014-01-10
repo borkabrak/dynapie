@@ -21,7 +21,7 @@
             {label: "javascript", value: 31}
         ];
 
-        piechart = Raphael("holder", 700, 600).pieChart(entries, {stroke: "#00f"});
+        piechart = Raphael("holder", 700, 600).pieChart(entries);
 
         $("button#addsector").click(function(){
             piechart.add_sector( $("#label").val(), $("#value").val() );
