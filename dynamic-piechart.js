@@ -55,17 +55,12 @@ Raphael.fn.pieChart = function (entries, params) {
 
         // Remove by label name
         var removed = {};
-        Object.keys(me.entries).forEach(function(label){
-            log("Looking to remove" + label);
-            if (typeof me.entries.label !== "undefined"){
-                log("Found it.");
-                removed.label = me.entries.label;
-                delete me.entries.label;
-            };
-        });
 
-        // What to remove?  label or value?
+        removed[what] = me.entries[what];
+        delete me.entries[what];
+
         me.draw();
+        console.log("Removed:%o",removed);
         return removed;
     };
 

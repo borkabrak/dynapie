@@ -15,7 +15,6 @@ TODO
         ...
     }
 
-* Remove sector takes a label or value to remove
 * Test if text *actually* fits inside sector
 * 3D-ify
 * Other groovy effects?

@@ -10,6 +10,10 @@ h1, h2 {
     background: #333;
     color: #0a0;
     padding: 0.5em;
-    border-radius: 0.5em;
     border: solid green 2px;
+    height: 10em;
+    width: 50%;
+    overflow: scroll;
+    float: left;
 }
+

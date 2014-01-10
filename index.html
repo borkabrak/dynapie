@@ -11,7 +11,7 @@
 
     function log(string){
         console.log(string);
-        $("#console").text(string);
+        $("#console").append("<p>&#10097; " + string + "</p>");
     };
 
     $(function(){
@@ -21,7 +21,7 @@
             "javascript": 31
         };
 
-        piechart = Raphael("holder", 700, 600).pieChart(entries);
+        piechart = Raphael("holder", 700, 500).pieChart(entries);
 
         $("button#addsector").click(function(){
             piechart.add_sector( $("#label").val(), $("#value").val()); 
@@ -29,8 +29,17 @@
         });
 
         $("button#removesector").click(function(){
-            piechart.remove_sector($("#remove_this").val());
+            var removed = piechart.remove_sector($("#remove_this").val());
+            if (Object.keys(removed)[0] !== ""){
+                $("input#label").val( Object.keys(removed)[0] );
+                $("input#value").val( removed[Object.keys(removed)[0]] );
+            };
         });
+
+        $("button#clear_console").click(function(){
+            $("#console").html(" ");
+        });
+
 
         $("#value").val( parseInt(Math.random() * 100) );
 
@@ -43,8 +52,6 @@
 
     <div id="holder"></div>
 
-    <div id="console"> </div>
-
     <h2>Add a sector</h2>
     <input id="label" placeholder="Label" value="Sample Label">
     <input id="value" placeholder="Value" value="20">
@@ -55,5 +62,10 @@
     <input id="remove_this" placeholder="What to remove">
     <br>
     <button id="removesector">Remove Sector</button>
+
+    <br>
+    <div id="console"> </div>
+    <button id="clear_console">Clear Console</button>
+
 </body>
 </html>
