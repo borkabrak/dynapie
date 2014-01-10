@@ -156,14 +156,14 @@ Raphael.fn.pieChart = function (entries, params) {
     function attach_events(sector, text){
         var duration = 500;
 
-        // state to save between mousover and mouseout
+        // state to save between mouseover and mouseout
         sector.mouseover(function () {
             sector.stop().animate({ transform: "s1.1 1.1 " + me.cx + "," + me.cy }, duration, "bounce");
-            text.stop().animate({ transform: "s1.1 1.1" }, duration, "elastic");
+            text.stop().animate({ transform: "s1.1 1.1 " + me.cx + "," + me.cy }, duration, "bounce");
 
         }).mouseout(function () {
             sector.stop().animate({ transform: "" }, duration, "elastic");
-            text.stop().transform("");
+            text.stop().animate({ transform: ""}, duration, "elastic");
 
         });
     };
