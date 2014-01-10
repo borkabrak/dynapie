@@ -7,6 +7,13 @@ sectors (data points).
 
 TODO
 ====
+* Rewrite entries passed in to be like:
+
+    {
+        "javascript": 33,
+        "css": 19,
+        ...
+    }
 
 * Remove sector takes a label or value to remove
 * Test if text *actually* fits inside sector
