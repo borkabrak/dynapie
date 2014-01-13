@@ -101,7 +101,6 @@ Raphael.fn.pieChart = function (entries, params) {
 
             me.elements.push(sector);
 
-            var text;
             // Sector too small?  Show a tooltip instead.
             //  For now, the test is just whether the sector is < 30°.
             if (angleplus < 30) {
@@ -109,7 +108,7 @@ Raphael.fn.pieChart = function (entries, params) {
                 small_sector(sector, label, value, sector_angle);
 
             } else {
-                text = make_text( 
+                var text = make_text( 
                     label + "(" + value + ")",
                     get_point( 0.6, sector_angle)
                 );
@@ -180,7 +179,7 @@ Raphael.fn.pieChart = function (entries, params) {
     // Alternate handling for when a sector is too narrow for its label.
     function small_sector(sector, label, value, middle_angle) {
         var start = get_point(1, middle_angle);
-        var end = get_point(1.4, middle_angle);
+        var end = get_point(1.2, middle_angle);
         
         me.elements.push( 
             me.path(
@@ -189,7 +188,7 @@ Raphael.fn.pieChart = function (entries, params) {
                 color: "#333"
             }),
 
-            make_text(label + "(" + value + ")", get_point(1.6, middle_angle))
+            make_text(label + "(" + value + ")", get_point(1.4, middle_angle))
 
         );
     };

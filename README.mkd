@@ -7,6 +7,7 @@ sectors (data points).
 
 TODO
 ====
+* convert to CamelCase 
 * Test if text *actually* fits inside sector
 * 3D-ify
 * Other groovy effects?
