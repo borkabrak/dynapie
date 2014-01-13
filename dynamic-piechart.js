@@ -67,9 +67,8 @@ Raphael.fn.pieChart = function (entries, params) {
     // Draw the whole chart.  Return the set of elements
     me.draw = function() {
 
-        // Widdershins edge (counter-clockwise)
-        var angle = 0;
-
+        
+        var angle = 0; // Widdershins edge of a sector (counter-clockwise)
         var total_value = Object.values(me.entries).reduce(function(x,y){ return x + y });
         var start = 0;
 
@@ -79,11 +78,9 @@ Raphael.fn.pieChart = function (entries, params) {
         Object.keys(me.entries).forEach(function(label){
             var value = entries[label];
 
-            // Deasil edge of sector (clockwise)
-            var angleplus = 360 * value / total_value;
+            var angleplus = 360 * value / total_value; // Deasil edge of sector (clockwise)
 
-            // Angle of a line drawn through the middle of the sector
-            var sector_angle = angle + (angleplus / 2);
+            var sector_angle = angle + (angleplus / 2); // Angle of a line drawn through the middle of the sector
 
             // Colors (2 for a gradient)
             var color = Raphael.hsb(start, 0.50, 1);
@@ -102,7 +99,7 @@ Raphael.fn.pieChart = function (entries, params) {
             me.elements.push(sector);
 
             var text;
-            // Sector too small?  Show tooltip instead.
+            // Sector too small?  Show a tooltip instead.
             //  For now, the test is just whether the sector is < 30°.
             if (angleplus < 30) {
                 sector.attr("title", label + "(" + value + ")");
@@ -165,7 +162,6 @@ Raphael.fn.pieChart = function (entries, params) {
     function attach_events(sector, text){
         var duration = 500;
 
-        // state to save between mouseover and mouseout
         sector.mouseover(function () {
             sector.stop().animate({ transform: "s1.1 1.1 " + me.cx + "," + me.cy }, duration, "bounce");
             text && text.stop().animate({ transform: "s1.1 1.1 " + me.cx + "," + me.cy }, duration, "bounce");
