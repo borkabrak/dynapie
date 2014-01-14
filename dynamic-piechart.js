@@ -74,7 +74,6 @@ Raphael.fn.pieChart = function (entries, params) {
 
         // Initialize component elements
         me.elements.remove();
-
         Object.keys(me.entries).forEach(function(label){
             var value = entries[label];
 
@@ -101,19 +100,18 @@ Raphael.fn.pieChart = function (entries, params) {
 
             me.elements.push(sector);
 
-            // Sector too small?  Show a tooltip instead.
-            //  For now, the test is just whether the sector is < 30°.
-            if (angleplus < 30) {
-
+            var text = make_text( 
+                label + "(" + value + ")",
+                get_point( 0.6, sector_angle)
+            );
+            if (too_small(angle, angle + angleplus, text)) {
+                text.remove();
                 small_sector(sector, label, value, sector_angle);
 
             } else {
-                var text = make_text( 
-                    label + "(" + value + ")",
-                    get_point( 0.6, sector_angle)
-                );
                 me.elements.push(text);
             };
+
 
             attach_events(sector, text);
 
@@ -141,6 +139,11 @@ Raphael.fn.pieChart = function (entries, params) {
         };
     };
 
+    // Return the angle of a particular point (off the horizontal, wrt the center)
+    function get_angle(point){
+        return Math.atan((point.x - me.cx) / (me.cy - point.y)) / rad;
+    }
+
     // Draw and return a sector
     function make_sector(startAngle, endAngle, params){
         var point1 = get_point(1, startAngle);
@@ -160,7 +163,6 @@ Raphael.fn.pieChart = function (entries, params) {
             stroke: "none",
             "font-size": 20,
         }).click(function(event){
-            console.log("Text clicked:%o", event);
             $("#remove_this").val(
                 event.target.textContent.replace(/(.*)\(.*/, "$1")
             );
@@ -187,7 +189,8 @@ Raphael.fn.pieChart = function (entries, params) {
     function small_sector(sector, label, value, middle_angle) {
         var start = get_point(1, middle_angle);
         var end = get_point(1.2, middle_angle);
-        
+       
+        // Put the label outside the chart, and draw a line from the sector to the lable
         me.elements.push( 
             me.path(
                 ["M", start.x, start.y, "L", end.x, end.y, "z"]
@@ -198,6 +201,15 @@ Raphael.fn.pieChart = function (entries, params) {
             make_text(label + "(" + value + ")", get_point(1.4, middle_angle))
 
         );
+    };
+
+    function too_small(angle1, angle2, text){
+        // Return true if the given text does not fit between the given angles.
+        //
+        // If neither side of the sector crosses the text's bounding box, we're NOT too small!
+        var bbox = text.getBBox()
+        return (angle1 < get_angle({x: bbox.x2, y: bbox.y2 }) && angle2 > get_angle(bbox)); 
+        
     };
 
 };
