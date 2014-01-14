@@ -208,7 +208,12 @@ Raphael.fn.pieChart = function (entries, params) {
         //
         // If neither side of the sector crosses the text's bounding box, we're NOT too small!
         var bbox = text.getBBox()
-        return (angle1 < get_angle({x: bbox.x2, y: bbox.y2 }) && angle2 > get_angle(bbox)); 
+        var corner1 = get_angle({x: bbox.x2, y: bbox.y2 });
+        var corner2 = get_angle(bbox);
+        console.info("%s", text.attr("text"));
+        console.log("Does %o lie between %s and %s?", bbox, angle1, angle2);
+        console.log("The box's angles are %s and %s", corner1, corner2);
+        return (angle1 < corner1 && angle2 > corner2); 
         
     };
 
