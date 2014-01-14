@@ -30,7 +30,7 @@
 
         $("button#removesector").click(function(){
             var removed = piechart.remove_sector($("#remove_this").val());
-            if (Object.keys(removed)[0] !== ""){
+            if (removed && Object.keys(removed)[0] !== ""){
                 $("input#label").val( Object.keys(removed)[0] );
                 $("input#value").val( removed[Object.keys(removed)[0]] );
             };
