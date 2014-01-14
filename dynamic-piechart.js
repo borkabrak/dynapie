@@ -159,19 +159,26 @@ Raphael.fn.pieChart = function (entries, params) {
             fill: "#000",
             stroke: "none",
             "font-size": 20,
+        }).click(function(event){
+            console.log("Text clicked:%o", event);
+            $("#remove_this").val(
+                event.target.textContent.replace(/(.*)\(.*/, "$1")
+            );
         });
     };
 
     function attach_events(sector, text){
-        var duration = 500;
+        var duration = 250;
+
+        var original_attributes = sector.attr();
 
         sector.mouseover(function () {
-            sector.stop().animate({ transform: "s1.1 1.1 " + me.cx + "," + me.cy }, duration, "bounce");
-            text && text.stop().animate({ transform: "s1.1 1.1 " + me.cx + "," + me.cy }, duration, "bounce");
+            sector.stop().animate({ transform: "s1.05 1.05 " + me.cx + "," + me.cy }, duration, "linear");
+            text && text.stop().animate({ transform: "s1.05 1.05 " + me.cx + "," + me.cy }, duration, "linear");
 
         }).mouseout(function () {
-            sector.stop().animate({ transform: "" }, duration, "elastic");
-            text && text.stop().animate({ transform: ""}, duration, "elastic");
+            sector.stop().animate({ transform: ""}, duration, "bounce");
+            text && text.stop().animate({ transform: ""}, duration, "bounce");
 
         });
     };
