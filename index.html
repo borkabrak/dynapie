@@ -6,6 +6,7 @@
     <script src="/script/jquery/jquery.js"></script>
     <script src="/script/raphael/raphael.js"></script>
     <script src="dynamic-piechart.js"></script>
+    <script src="rut.js"></script>
     <title>Dynamic Pie Chart Demo</title>
     <script>
 
@@ -16,9 +17,12 @@
 
     $(function(){
         var entries = {
-            "css": 15,
-            "html": 40,
-            "javascript": 50 
+            "css": 22.5,
+            "less": 22.5,
+            "html": 135,
+            "javascript": 135,
+            "jquery": 22.5,
+            "bootstrap": 22.5
         };
 
         piechart = Raphael("holder", 800, 500).pieChart(entries);

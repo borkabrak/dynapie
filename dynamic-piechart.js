@@ -24,6 +24,13 @@
                r: Radius of the chart
  
                stroke: Stroke color of the lines
+
+
+  
+  NOTES:
+    * About angles: The zero angle is at 3 o'clock.  Positive angles are 
+      counter-clockwise from there. (90 degrees is at 12 o'clock)
+
  */
 
 Raphael.fn.pieChart = function (entries, params) {
@@ -96,7 +103,10 @@ Raphael.fn.pieChart = function (entries, params) {
                 }
             ).attr(
                 "title", label + "(" + value + ")"
-            );
+            ).click(function(event){
+                console.log(event);
+                console.log("click: (%s, %s): %s°?", event.offsetX, event.offsetY, get_angle(event).toFixed(2));
+            });
 
             me.elements.push(sector);
 
@@ -139,10 +149,20 @@ Raphael.fn.pieChart = function (entries, params) {
         };
     };
 
-    // Return the angle of a particular point (off the horizontal, wrt the center)
+    // Return the angle of a particular point (off the right horizontal, wrt the center)
     function get_angle(point){
-        return Math.atan((point.x - me.cx) / (me.cy - point.y)) / rad;
+
+        // From origin center of circle
+        var x = point.x - me.cx;
+        var y = me.cy - point.y;
+        var angle = Math.atan2( y , x ) / rad;
+        if (angle < 0) {
+            angle = 360 + angle;
+        };
+        console.log("atan2(%s, %s) / %s = %s", y, x, rad, angle);
+        return angle;
     }
+
 
     // Draw and return a sector
     function make_sector(startAngle, endAngle, params){
@@ -207,13 +227,13 @@ Raphael.fn.pieChart = function (entries, params) {
         // Return true if the given text does not fit between the given angles.
         //
         // If neither side of the sector crosses the text's bounding box, we're NOT too small!
-        var bbox = text.getBBox()
-        var corner1 = get_angle({x: bbox.x2, y: bbox.y2 });
-        var corner2 = get_angle(bbox);
-        console.info("%s", text.attr("text"));
-        console.log("Does %o lie between %s and %s?", bbox, angle1, angle2);
-        console.log("The box's angles are %s and %s", corner1, corner2);
-        return (angle1 < corner1 && angle2 > corner2); 
+        var textbox = text.getBBox();
+        var point1 = {x: textbox.x2, y: textbox.y2 };
+        var point2 = {x: textbox.x, y: textbox.y };
+        var corner1 = get_angle(point1);
+        var corner2 = get_angle(point2);
+
+        return (angle1 > corner1 || angle2 < corner2); 
         
     };
 
