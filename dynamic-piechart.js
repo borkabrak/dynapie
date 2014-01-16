@@ -67,7 +67,6 @@ Raphael.fn.pieChart = function (entries, params) {
         delete me.entries[what];
 
         me.draw();
-        console.log("Removed:%o",removed);
         return removed;
     };
 
@@ -104,8 +103,6 @@ Raphael.fn.pieChart = function (entries, params) {
             ).attr(
                 "title", label + "(" + value + ")"
             ).click(function(event){
-                console.log(event);
-                console.log("click: (%s, %s): %s°?", event.offsetX, event.offsetY, get_angle(event).toFixed(2));
             });
 
             me.elements.push(sector);
@@ -159,7 +156,6 @@ Raphael.fn.pieChart = function (entries, params) {
         if (angle < 0) {
             angle = 360 + angle;
         };
-        console.log("atan2(%s, %s) / %s = %s", y, x, rad, angle);
         return angle;
     }
 
@@ -183,8 +179,11 @@ Raphael.fn.pieChart = function (entries, params) {
             stroke: "none",
             "font-size": 20,
         }).click(function(event){
-            $("#remove_this").val(
+            $("#remove_this, #label").val(
                 event.target.textContent.replace(/(.*)\(.*/, "$1")
+            );
+            $("#value").val(
+                event.target.textContent.replace(/.*\((.*)\)/,"$1")
             );
         });
     };
@@ -227,13 +226,18 @@ Raphael.fn.pieChart = function (entries, params) {
         // Return true if the given text does not fit between the given angles.
         //
         // If neither side of the sector crosses the text's bounding box, we're NOT too small!
-        var textbox = text.getBBox();
-        var point1 = {x: textbox.x2, y: textbox.y2 };
-        var point2 = {x: textbox.x, y: textbox.y };
-        var corner1 = get_angle(point1);
-        var corner2 = get_angle(point2);
+        var box = text.getBBox();
+        var corner_angles = [
+            get_angle({ x: box.x,  y: box.y}),
+            get_angle({ x: box.x2, y: box.y}),
+            get_angle({ x: box.x,  y: box.y2}),
+            get_angle({ x: box.x2, y: box.y2})
+        ];
 
-        return (angle1 > corner1 || angle2 < corner2); 
+        var min = function(array){ return array.reduce(function(x,y){ return (x < y)? x : y })};
+        var max = function(array){ return array.reduce(function(x,y){ return (x > y)? x : y })};
+
+        return (angle1 > min(corner_angles) || angle2 < max(corner_angles)); 
         
     };
 

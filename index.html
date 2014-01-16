@@ -16,20 +16,18 @@
     };
 
     $(function(){
+
         var entries = {
-            "css": 22.5,
-            "less": 22.5,
+            "css": 45,
             "html": 135,
             "javascript": 135,
-            "jquery": 22.5,
-            "bootstrap": 22.5
+            "jquery": 30,
         };
 
         piechart = Raphael("holder", 800, 500).pieChart(entries);
 
         $("button#addsector").click(function(){
             piechart.add_sector( $("#label").val(), $("#value").val()); 
-            $("#value").val( parseInt(Math.random() * 100) );
         });
 
         $("button#removesector").click(function(){
