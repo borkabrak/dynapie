@@ -221,11 +221,11 @@ Raphael.fn.pieChart = function (entries, params) {
        
         // Put the label outside the chart, and draw a line from the sector to the lable
         me.elements.push( 
-            me.path(
-                ["M", start.x, start.y, "L", end.x, end.y, "z"]
-            ).attr({ 
-                color: "#333"
-            }),
+            me.path(Raphael.fullfill(
+                "M {start.x}, {start.y} L {end.x},{end.y} z",
+                { start: start, end: end }
+
+            )).attr({ color: "#333" }),
 
             make_text(label + "(" + value + ")", get_point(1.4, middle_angle))
 
