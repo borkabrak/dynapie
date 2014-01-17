@@ -160,10 +160,18 @@ Raphael.fn.pieChart = function (entries, params) {
 
     // Draw and return a sector
     function make_sector(startAngle, endAngle, params){
-        var point1 = get_point(1, startAngle);
-        var point2 = get_point(1, endAngle);
-        var patharr = ["M", me.cx, me.cy, "L", point1.x, point1.y, "A", me.r, me.r, 0, +(endAngle - startAngle > 180), 0, point2.x, point2.y, "z"]
-        return me.path( patharr ).attr(params);
+        return me.path(Raphael.fullfill(
+
+                "M{me.cx},{me.cy} L{point1.x},{point1.y} A{me.r},{me.r} 0 {largearcflag} 0 {point2.x},{point2.y} z",
+
+                {
+                    point1: get_point(1, startAngle),
+                    point2: get_point(1, endAngle),
+                    me: me,
+                    largearcflag: +(endAngle - startAngle > 180)
+                })
+
+        ).attr(params);
     };
 
     // Draw and return a text element
