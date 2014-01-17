@@ -118,7 +118,6 @@ Raphael.fn.pieChart = function (entries, params) {
                 me.elements.push(text);
             };
 
-
             attach_events(sector, text);
 
             angle += angleplus;
@@ -194,11 +193,15 @@ Raphael.fn.pieChart = function (entries, params) {
         // On hover, swell sector
         sector.mouseover(function () {
             sector.stop().animate({ transform: "s1.05 1.05 " + me.cx + "," + me.cy }, duration, "linear");
-            text && text.stop().animate({ transform: "s1.05 1.05 " + me.cx + "," + me.cy }, duration, "linear");
+            if (text.type == "text") {
+                text.stop().animate({ transform: "s1.05 1.05 " + me.cx + "," + me.cy }, duration, "linear");
+            };
 
         }).mouseout(function () {
             sector.stop().animate({ transform: ""}, duration, "bounce");
-            text && text.stop().animate({ transform: ""}, duration, "bounce");
+            if (text.type == "text") {
+                text && text.stop().animate({ transform: ""}, duration, "bounce");
+            };
 
         });
     };
