@@ -60,9 +60,9 @@ Raphael.fn.pieChart = function (entries, params) {
             return null 
         };
 
-        // Remove by label name
         var removed = {};
 
+        // Remove by label name
         removed[what] = me.entries[what];
         delete me.entries[what];
 
@@ -72,7 +72,6 @@ Raphael.fn.pieChart = function (entries, params) {
 
     // Draw the whole chart.  Return the set of elements
     me.draw = function() {
-
         
         var angle = 0; // Widdershins edge of a sector (counter-clockwise)
         var total_value = Object.values(me.entries).reduce(function(x,y){ return x + y });
@@ -189,10 +188,10 @@ Raphael.fn.pieChart = function (entries, params) {
     };
 
     function attach_events(sector, text){
+
         var duration = 250;
 
-        var original_attributes = sector.attr();
-
+        // On hover, swell sector
         sector.mouseover(function () {
             sector.stop().animate({ transform: "s1.05 1.05 " + me.cx + "," + me.cy }, duration, "linear");
             text && text.stop().animate({ transform: "s1.05 1.05 " + me.cx + "," + me.cy }, duration, "linear");
